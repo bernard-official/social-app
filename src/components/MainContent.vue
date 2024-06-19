@@ -1,23 +1,21 @@
 <template>
   <main class="main-content">
     <!-- <TransitionGroup appear name="staggered" tag="ul"> -->
-    <Card
-    v-for="postFeed in postFeeds"
-    >
-      <template #profile-pic></template>
-      <template #userId>{{  }}
+    <Card v-for="postFeed in postFeeds" :key="postFeed.id">
+      <template #profile-pic>
+        <img :src="`https://picsum.photos/id/${postFeed.id * 10}/50/50`" alt="" />
+      </template>
+      <template #userId>
         <span>EVA ANN</span>
+        <small style="display: block">{{ postFeed.title }}</small>
       </template>
       <template #description>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium praesentium quaerat
-          blanditiis cupiditate laboriosam, tempore nemo magnam voluptatibus nihil, quis nesciunt
-          natus quisquam, repellendus necessitatibus soluta accusamus. Distinctio, vitae
-          dignissimos?
+          {{ postFeed.body }}
         </p>
       </template>
       <template #image>
-        <img src="" alt="">
+        <img :src="`https://picsum.photos/id/${[postFeed.id]}/400/400`" alt="" />
       </template>
       <template #like>389k</template>
       <template #comment>87</template>
@@ -26,22 +24,13 @@
   </main>
 </template>
 
-<script setup lang="ts" >
-import { inject } from 'vue';
+<script setup lang="ts">
+import { inject } from 'vue'
 import Card from './Card.vue'
-import type { Posts } from '@/Types';
+import type { Posts } from '@/Types'
+import { postsArrayKey } from '@/Types'
 
-let string = "hello world"  // this is on pointer 1
-
-Symbol('hello world') // this on point 4
-
-string ='some new world' // this is on pointer 2
-
-string = "hello world" // this is on pointer 3
-
-const postFeeds  = inject('posts') as Posts
-
-console.log(Symbol("foo") === Symbol("foo"))
+const postFeeds = inject(postsArrayKey)
 </script>
 
 <style>

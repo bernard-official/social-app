@@ -1,8 +1,8 @@
-import {type InjectionKey} from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 //creating a generic interface for our data. T extents -> constrict the type to that data structure we set i.e string or object or whatever
 // export interface ApiResponse<T ,K extends string>{
-//     // posts?: Posts<T> | [], 
-//     // comments?: Comments<T> | [], 
+//     // posts?: Posts<T> | [],
+//     // comments?: Comments<T> | [],
 //     limits: number
 //     skip: number
 //     total: number
@@ -11,17 +11,16 @@ import {type InjectionKey} from 'vue'
 // }
 
 export interface StaticProperties {
-    limits: number;
-    skip: number;
-    total: number;
+  limits: number
+  skip: number
+  total: number
 }
 
 export type ApiResponse<T, K extends string> = StaticProperties & {
-    [Property in K]: T[];
-};
+  [Property in K]: T[]
+}
 
-
-export const postsArrayKey = Symbol() as InjectionKey<string>
+export const postsArrayKey = Symbol() as InjectionKey<Ref<Posts[] | undefined>>
 
 // function getPostTitle(title,postID){
 //     return {
@@ -29,7 +28,7 @@ export const postsArrayKey = Symbol() as InjectionKey<string>
 //     }
 // }
 
-  /*
+/*
   POSTS will return {
 
   posts:Array<{}>
@@ -39,7 +38,7 @@ export const postsArrayKey = Symbol() as InjectionKey<string>
 }
 */
 
-  /*
+/*
   Comments will return {
 
   comments:Array<{}>
@@ -48,33 +47,32 @@ export const postsArrayKey = Symbol() as InjectionKey<string>
   limit:number
 }
 */
-  
-  export type Posts = {
-      body:string,
-      id: number,
-      reactions: Reactions,
-      tags: string[],
-      title: string;
-      userId: number
-      views: number
-  }
-  
-  export type Comments<T> = {
-      body: string,
-      id: number, 
-      likes: number,
-      postId:number 
-      users: User<T>,
-  }
-  
-  export type User<T> = {
-      fullName: string,
-      id: number,
-      username: string,
-  }
-  
-  export type Reactions = {
-      likes: 192, 
-      dislikes: 25
-  }
-  
+
+export type Posts = {
+  body: string
+  id: number
+  reactions: Reactions
+  tags: string[]
+  title: string
+  userId: number
+  views: number
+}
+
+export type Comments<T> = {
+  body: string
+  id: number
+  likes: number
+  postId: number
+  users: User<T>
+}
+
+export type User<T> = {
+  fullName: string
+  id: number
+  username: string
+}
+
+export type Reactions = {
+  likes: 192
+  dislikes: 25
+}
