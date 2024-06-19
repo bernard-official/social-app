@@ -16,25 +16,22 @@
       <slot name="description"></slot>
     </div>
     <div class="card-img">
-      pic
       <slot name="image"></slot>
     </div>
     <div class="card-footer">
       <div class="icons">
-          <i class="pi pi-heart" style="font-size: 1rem"></i>
+        <i class="pi pi-heart" style="font-size: 1rem"></i>
         <slot name="like"></slot>
       </div>
       <div class="icons">
         <i class="pi pi-comments" style="font-size: 1rem"></i>
-        <slot name="comment"  ></slot>
+        <slot name="comment"></slot>
       </div>
     </div>
   </div>
 </template>
 
-
-
-<style>
+<style scoped>
 .post-card {
   padding: 1rem;
   border-radius: 1cap;
@@ -50,11 +47,12 @@
   display: flex;
   /* flex-direction: column; */
   justify-content: space-between;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
 }
 .card-header .profile {
   display: flex;
-  gap: 3px;
+  gap: 0.5rem;
+  align-items: center;
 }
 .card-header .profile .avatar {
   background-color: azure;
@@ -66,41 +64,56 @@
   align-items: center;
   object-fit: cover;
 }
+
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+}
 .card-header .profile .btn-ellipses {
   font-size: larger;
   justify-content: center;
   align-items: center;
   object-fit: cover;
 }
-.card-description{
-margin-left: 3rem;
-display: flex;
-max-width: 100%;
-justify-content: space-between;
+.card-description {
+  margin-left: 3rem;
+  display: flex;
+  max-width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
-.card-img{
-border: 1px solid;
-border-radius: 1cap;
-margin-left: 3rem;
-display: flex;
-max-width: 100%;
-height: 50vh;
-justify-content: space-between;
+.card-img {
+  border: 1px solid;
+  border-radius: 1cap;
+  margin-left: 3rem;
+  display: flex;
+  max-width: 100%;
+  height: 50vh;
+  justify-content: space-between;
+  overflow: hidden;
 }
+
+.card-img :slotted(img) {
+  width: 100%;
+  object-fit: cover;
+}
+
 .card-footer {
   padding-left: 3rem;
   display: flex;
   width: 100%;
   justify-content: space-between;
 }
-.icons{
-    display: flex;
-    justify-content: center;
-    gap:5px;
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 </style>
 
 <script setup lang="ts">
-
 import 'primeicons/primeicons.css'
 </script>

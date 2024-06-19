@@ -1,7 +1,6 @@
 <template>
   <div id="container">
-    {{ postFeeds }} - post feed
-    <Navigation/>
+    <Navigation />
     <MainContent />
     <NewsFeed />
     <!-- <div v-for="post in postFeeds" v-bind:key="postFeeds?.id">{{ post }}</div> -->
@@ -9,35 +8,35 @@
 </template>
 
 <script setup lang="ts">
-
-import { ref, onMounted, provide } from "vue";
+import { ref, onMounted, provide } from 'vue'
 import Navigation from './components/Navigation.vue'
 import MainContent from './components/MainContent.vue'
-import NewsFeed from './components/NewsFeed.vue';
-import { type ApiResponse, type Comments, type Posts,postsArrayKey  } from "./Types";
+import NewsFeed from './components/NewsFeed.vue'
+import { type ApiResponse, type Comments, type Posts, postsArrayKey } from './Types'
 
 // defineProps<ApiResponse<T>>()
 
-const postFeeds = ref<Posts[] | null> (null);
+const postFeeds = ref<Posts[]>()
 // const comments = ref<Comments<T> | null>(null);
-// provide('posts', postFeeds)
-
+provide('posts', postFeeds)
+provide(postsArrayKey, postFeeds)
 
 // const url = 'https://dummyjson.com/posts'
-async function fetchData(){
+async function fetchData() {
   try {
-    const response = await fetch("https://dummyjson.com/posts");
+    const response = await fetch('https://dummyjson.com/posts')
     if (!response.ok) throw new Error('Failed to fetch data')
-    const {posts} = await response.json()  as Awaited<ApiResponse<Posts,'posts'>> //as keyword takes control over the expected typecast return . Awaited utility
+    const { posts } = (await response.json()) as Awaited<ApiResponse<Posts, 'posts'>> //as keyword takes control over the expected typecast return . Awaited utility
 
-  console.log(posts)
+    console.log(posts)
     postFeeds.value = posts
   } catch (error) {
-    
+    console.error('Failed to fetch post:', error)
+    return
   }
 }
 
-onMounted(async ()=>{
+onMounted(async () => {
   await fetchData()
 })
 
@@ -53,7 +52,6 @@ onMounted(async ()=>{
 //   }
 // )
 
-
 // async function fetchData(){
 //   try {
 //       const response = await fetch(url);
@@ -67,15 +65,13 @@ onMounted(async ()=>{
 //       }
 //       */
 //       const dataJSON: Promise<ApiResponse<Posts>> =  response.json();
-//       const data = await dataJSON 
+//       const data = await dataJSON
 
 //       console.log(postFeeds.value)
 //     } catch (error) {
 //       console.error("Failed to fetch post:", error);
 //     }
 // }
-
-
 
 // onMounted(
 // /*
@@ -92,7 +88,7 @@ onMounted(async ()=>{
 //       const response = await fetch(url);
 //       // const data: Promise<ApiResponse<T>> = response.json();
 //       const data: Promise<Posts<T>> = response.json();
-//       postFeeds.value = await data 
+//       postFeeds.value = await data
 //       console.log(postFeeds.value)
 //     } catch (error) {
 //       console.error("Failed to fetch post:", error);
@@ -100,7 +96,6 @@ onMounted(async ()=>{
 //   }
 
 // )
-
 
 // onMounted(
 //   async function fetchDataApi<T>(url:string): Promise<ApiResponse<T>>{
@@ -118,16 +113,14 @@ onMounted(async ()=>{
 //     try {
 //       const response = await fetch('https://dummyjson.com/comments');
 //       const data: any = response.json();
-//       comments.value = data 
+//       comments.value = data
 //       console.log(comments.value)
 //     } catch (error) {
 //       console.error("Failed to fetch post:", error);
 //     }
 //   }
 // )
-
 </script>
-
 
 <style>
 header {
@@ -143,19 +136,19 @@ header {
   height: 100vh;
   /* overflow: auto; */
 }
-.sidebar{
-  border-left: 1px solid ;
-  border-right: 1px solid ;
+.sidebar {
+  border-left: 1px solid;
+  border-right: 1px solid;
   padding: 1rem;
   flex: 1;
-} 
-.left-sidebar{
+}
+.left-sidebar {
   order: 1;
 }
-.right-sidebar{
+.right-sidebar {
   order: 3;
 }
-.main-content{
+.main-content {
   padding: 1rem;
   order: 2;
   flex: 2;
