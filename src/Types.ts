@@ -22,6 +22,7 @@ export type ApiResponse<T, K extends string> = StaticProperties & {
 
 export const postsArrayKey = Symbol() as InjectionKey<Ref<Posts[] | undefined>>
 
+export const commentsArrayKey = Symbol() as InjectionKey<Ref<Comments[] | undefined>>
 // function getPostTitle(title,postID){
 //     return {
 //         postID,
@@ -38,15 +39,7 @@ export const postsArrayKey = Symbol() as InjectionKey<Ref<Posts[] | undefined>>
 }
 */
 
-/*
-  Comments will return {
 
-  comments:Array<{}>
-  total:number
-  skip:number,
-  limit:number
-}
-*/
 
 export type Posts = {
   body: string
@@ -58,15 +51,15 @@ export type Posts = {
   views: number
 }
 
-export type Comments<T> = {
+export type Comments = {
   body: string
   id: number
   likes: number
   postId: number
-  users: User<T>
+  users: User
 }
 
-export type User<T> = {
+export type User = {
   fullName: string
   id: number
   username: string

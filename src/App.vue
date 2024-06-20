@@ -3,8 +3,8 @@
     <Navigation />
     <MainContent />
     <NewsFeed />
-    <!-- <div v-for="post in postFeeds" v-bind:key="postFeeds?.id">{{ post }}</div> -->
-  </div>
+    <!-- <div v-for="comment in commentFeeds" v-bind:key="comment.body">{{ comment }}</div> -->
+  </div> 
 </template>
 
 <script setup lang="ts">
@@ -12,16 +12,18 @@ import { ref, onMounted, provide } from 'vue'
 import Navigation from './components/Navigation.vue'
 import MainContent from './components/MainContent.vue'
 import NewsFeed from './components/NewsFeed.vue'
-import { type ApiResponse, type Comments, type Posts, postsArrayKey } from './Types'
+import { type ApiResponse, type Comments, type Posts, postsArrayKey, commentsArrayKey } from './Types'
 
 // defineProps<ApiResponse<T>>()
 
 const postFeeds = ref<Posts[]>()
-// const comments = ref<Comments<T> | null>(null);
+const commentFeeds = ref<Comments[]>();
+
+//passing props to other components
 provide('posts', postFeeds)
 provide(postsArrayKey, postFeeds)
+provide(commentsArrayKey, commentFeeds)
 
-// const url = 'https://dummyjson.com/posts'
 async function fetchData() {
   try {
     const response = await fetch('https://dummyjson.com/posts')
@@ -36,90 +38,26 @@ async function fetchData() {
   }
 }
 
+async function fetchData2() {
+  try {
+    const response = await fetch('https://dummyjson.com/comments')
+    if(!response.ok) throw new Error ('Failed to fetch Data')
+    const { comments } = (await response.json()) as Awaited<ApiResponse<Comments, 'comments'>>
+    console.log(comments)
+    commentFeeds.value = comments
+  } catch (error) {
+    console.error('failed to fetched comments', error)
+  }
+}
+
 onMounted(async () => {
   await fetchData()
 })
+onMounted(async () => {
+  await fetchData2()
+})
 
-// onMounted(async() => {
-//     try {
-//       const response = await fetch(url);
-//       const data: any = response.json();
-//       posts.value = data
-//       console.log(posts.value)
-//     } catch (error) {
-//       console.error("Failed to fetch post:", error);
-//     }
-//   }
-// )
 
-// async function fetchData(){
-//   try {
-//       const response = await fetch(url);
-//       // const data: Promise<ApiResponse<T>> = response.json();
-//       /*
-//       What is actually being returned is {
-//       total:number
-//       skip:number,
-//       limit:number
-//       posts:POSTS
-//       }
-//       */
-//       const dataJSON: Promise<ApiResponse<Posts>> =  response.json();
-//       const data = await dataJSON
-
-//       console.log(postFeeds.value)
-//     } catch (error) {
-//       console.error("Failed to fetch post:", error);
-//     }
-// }
-
-// onMounted(
-// /*
-//   POSTS will return {
-
-//   posts:Array<{}>
-//   total:number
-//   skip:number,
-//   limit:number
-// }
-// */
-//   async function fetchData<T>() {
-//     try {
-//       const response = await fetch(url);
-//       // const data: Promise<ApiResponse<T>> = response.json();
-//       const data: Promise<Posts<T>> = response.json();
-//       postFeeds.value = await data
-//       console.log(postFeeds.value)
-//     } catch (error) {
-//       console.error("Failed to fetch post:", error);
-//     }
-//   }
-
-// )
-
-// onMounted(
-//   async function fetchDataApi<T>(url:string): Promise<ApiResponse<T>>{
-//     try {
-//       const response = await fetch(url);
-//       const data: ApiResponse<T> = response.json();
-//       posts.value = data
-//       console.log(posts.value)
-//     } catch (error) {
-//       console.error("Failed to fetch post:", error);
-//     }
-//   }
-// )
-// onMounted(async () => {
-//     try {
-//       const response = await fetch('https://dummyjson.com/comments');
-//       const data: any = response.json();
-//       comments.value = data
-//       console.log(comments.value)
-//     } catch (error) {
-//       console.error("Failed to fetch post:", error);
-//     }
-//   }
-// )
 </script>
 
 <style>

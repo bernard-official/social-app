@@ -1,7 +1,7 @@
 <template>
   <main class="main-content">
     <!-- <TransitionGroup appear name="staggered" tag="ul"> -->
-    <Card v-for="postFeed in postFeeds" :key="postFeed.id">
+    <Card v-for="(postFeed,index) in postFeeds" :key="postFeed.id">
       <template #profile-pic>
         <img :src="`https://picsum.photos/id/${postFeed.id * 10}/50/50`" alt="" />
       </template>
@@ -18,7 +18,18 @@
         <img :src="`https://picsum.photos/id/${[postFeed.id]}/400/400`" alt="" />
       </template>
       <template #like>389k</template>
-      <template #comment>87</template>
+      
+      <!-- <template #comment v-for="comment in commentFeeds" v-bind:key="comment.id">
+        {{ comment.likes }} 
+      </template> -->
+      
+      <template   #commentFeed>
+        <div >
+          <div v-for="comments in fetchCommentByPostId(postFeed.id)" >
+            {{ comments }}
+          </div>
+        </div>
+      </template>
     </Card>
     <!-- </TransitionGroup> -->
   </main>
@@ -27,10 +38,25 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 import Card from './Card.vue'
-import type { Posts } from '@/Types'
-import { postsArrayKey } from '@/Types'
+import type { ApiResponse, Comments, Posts } from '@/Types'
+import { postsArrayKey, commentsArrayKey } from '@/Types'
 
 const postFeeds = inject(postsArrayKey)
+const commentFeeds = inject(commentsArrayKey)
+
+
+async function fetchCommentByPostId(postFeedId: number) {
+  try {
+    const response = await fetch(`https://dummyjson.com/comments/post/${postFeedId}`)
+    if(!response.ok) throw new Error ('Failed to fetch Data')
+    const { comments } = (await response.json()) as Awaited<ApiResponse<Comments, 'comments'>>
+  
+    return comments
+  } catch (error) {
+    console.error('failed to fetched comments', error)
+  }
+}
+
 </script>
 
 <style>
@@ -57,4 +83,5 @@ const postFeeds = inject(postsArrayKey)
   opacity: 0;
   height: 0;
 }
-</style>
+
+</style>ApiResponse, Comments, 
