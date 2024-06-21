@@ -24,26 +24,27 @@
         <slot name="like"></slot>
       </div>
       <div class="icons" @click="toggleComment">
-        <i class="pi pi-comments" style="font-size: 1rem" ></i>
+        <i class="pi pi-comments" style="font-size: 1rem"></i>
         {{ isActive }}
         <slot name="comment"></slot>
       </div>
     </div>
-    <div v-if="isActive" v-bind:class="{'comments-section': toggleComment}">
+    <div v-if="isActive" v-bind:class="{ 'comments-section': toggleComment }">
       <slot name="commentFeed">
         <!-- Comments will be displayed here -->
-        </slot>
+      </slot>
     </div>
   </div>
 </template>
 
-<script lang="ts" >
-import { ref,computed } from 'vue';
-  
-const isActive = ref(false);
+<script lang="ts" setup>
+import 'primeicons/primeicons.css'
+import { ref, computed } from 'vue'
 
-  function toggleComment() {
-    isActive.value = !isActive.value  
+const isActive = ref(false)
+
+function toggleComment() {
+  isActive.value = !isActive.value
 }
 </script>
 
@@ -128,14 +129,10 @@ const isActive = ref(false);
   align-items: center;
   gap: 5px;
 }
-.comments-section{
-  margin-bottom: .5 rem;
+.comments-section {
+  margin-bottom: 0.5 rem;
   border: 1px solid;
   border-radius: 1cap;
-  max-width:100% ;
+  max-width: 100%;
 }
 </style>
-
-<script setup lang="ts">
-import 'primeicons/primeicons.css'
-</script>

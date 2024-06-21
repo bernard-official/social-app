@@ -1,7 +1,7 @@
 <template>
   <main class="main-content">
     <!-- <TransitionGroup appear name="staggered" tag="ul"> -->
-    <Card v-for="(postFeed,index) in postFeeds" :key="postFeed.id">
+    <Card v-for="postFeed in postFeeds" :key="postFeed.id">
       <template #profile-pic>
         <img :src="`https://picsum.photos/id/${postFeed.id * 10}/50/50`" alt="" />
       </template>
@@ -18,16 +18,10 @@
         <img :src="`https://picsum.photos/id/${[postFeed.id]}/400/400`" alt="" />
       </template>
       <template #like>389k</template>
-      
-      <!-- <template #comment v-for="comment in commentFeeds" v-bind:key="comment.id">
-        {{ comment.likes }} 
-      </template> -->
-      
-      <template   #commentFeed>
-        <div >
-          <div v-for="comments in fetchCommentByPostId(postFeed.id)" >
-            {{ comments }}
-          </div>
+
+      <template #commentFeed>
+        <div v-for="(comments, index) in postComments[postFeed.id]" :key="index">
+          {{ comments.body }}
         </div>
       </template>
     </Card>
@@ -36,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, ref, watch } from 'vue'
 import Card from './Card.vue'
 import type { ApiResponse, Comments, Posts } from '@/Types'
 import { postsArrayKey, commentsArrayKey } from '@/Types'
@@ -44,19 +38,32 @@ import { postsArrayKey, commentsArrayKey } from '@/Types'
 const postFeeds = inject(postsArrayKey)
 const commentFeeds = inject(commentsArrayKey)
 
+const postComments = ref<{
+  [key: number]: Comments[] | undefined
+}>({})
 
 async function fetchCommentByPostId(postFeedId: number) {
   try {
     const response = await fetch(`https://dummyjson.com/comments/post/${postFeedId}`)
-    if(!response.ok) throw new Error ('Failed to fetch Data')
+    if (!response.ok) throw new Error('Failed to fetch Data')
     const { comments } = (await response.json()) as Awaited<ApiResponse<Comments, 'comments'>>
-  
+
     return comments
   } catch (error) {
     console.error('failed to fetched comments', error)
   }
 }
 
+watch(
+  () => postFeeds?.value,
+  async () => {
+    if (!postFeeds?.value) return
+    for (const post of postFeeds.value) {
+      postComments.value[post.id] = await fetchCommentByPostId(post.id)
+    }
+    console.log(postComments.value, 'postCommsdents')
+  }
+)
 </script>
 
 <style>
@@ -83,5 +90,5 @@ async function fetchCommentByPostId(postFeedId: number) {
   opacity: 0;
   height: 0;
 }
-
-</style>ApiResponse, Comments, 
+</style>
+ApiResponse, Comments,
